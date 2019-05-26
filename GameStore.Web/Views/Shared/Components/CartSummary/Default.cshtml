@@ -1,0 +1,12 @@
+﻿@model CartSummaryViewModel
+<div class="navbar-right">
+    @Html.ActionLink("Заказать", "Index", "Cart",
+    new { returnUrl = Context.Request.Path },
+    new { @class = "btn btn-default navbar-btn" })
+</div>
+
+<div class="navbar-text navbar-right">
+    <b>Ваша корзина:</b>
+    @Model.Lines.Sum(x => x.Quantity) игр,
+    @Model.TotalValue.ToString("# руб")
+</div>
