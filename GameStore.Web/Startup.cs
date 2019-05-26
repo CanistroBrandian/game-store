@@ -1,6 +1,7 @@
 ﻿using GameStore.Domain.Abstract;
 using GameStore.Domain.Concrete;
 using GameStore.Web.Infrastructure;
+using GameStore.Web.Middlewares.Extensions;
 using GameStore.Web.Services.Abstract;
 using GameStore.Web.Services.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -46,8 +47,8 @@ namespace GameStore.Web
                 return new EmailOrderProcessor(emailSettings, s.GetService<ICartProvider>(), s.GetService<IHostingEnvironment>());
             });
             services.AddScoped<IAuthProvider, CookieAuthProvider>();
-            services.AddScoped<ICartProvider, CookieCartProvider>();
 
+            services.AddCookieCartProvider();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
@@ -75,6 +76,7 @@ namespace GameStore.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseCookieCartProvider();
             app.UseMvc(RouteCollection.BuildRouter);
         }
     }

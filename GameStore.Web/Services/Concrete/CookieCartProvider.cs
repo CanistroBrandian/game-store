@@ -1,5 +1,6 @@
 ﻿using GameStore.Domain.Abstract;
 using GameStore.Domain.Entities;
+using GameStore.Web.Middlewares;
 using GameStore.Web.Models;
 using GameStore.Web.Services.Abstract;
 using Microsoft.AspNetCore.Http;
@@ -13,28 +14,15 @@ namespace GameStore.Web.Services.Concrete
     public class CookieCartProvider : ICartProvider
     {
         private const string CartCookieName = "Cart";
+        private const string CartContextKey = "CartItems";
 
         private readonly List<CartLine> _lineCollection;
         private readonly HttpContext _httpContext;
-        public CookieCartProvider(IHttpContextAccessor httpContextAccessor, IGameRepository gameRepository)
+        public CookieCartProvider(IHttpContextAccessor httpContextAccessor)
         {
             _httpContext = httpContextAccessor.HttpContext;
-            var cartCookie = _httpContext.Request.Cookies[CartCookieName];
-            _lineCollection = new List<CartLine>();
-            if (!string.IsNullOrEmpty(cartCookie))
-            {
-                var cookieCartLines = JsonConvert.DeserializeObject<List<CookieCartLine>>(cartCookie);
-                var ids = cookieCartLines.Select(f => f.GameId);
-                var games = gameRepository.GetGamesByIds(ids);
-                foreach (var game in games)
-                {
-                    _lineCollection.Add(new CartLine
-                    {
-                        Game = game,
-                        Quantity = cookieCartLines.First(s => s.GameId == game.GameId).Quantity
-                    });
-                }
-            }
+            var items = GetCartItems(_httpContext);
+            _lineCollection = items ?? throw new InvalidOperationException("Items shoud be provided");
         }
         public void AddItem(Game game, int quantity)
         {
@@ -92,6 +80,26 @@ namespace GameStore.Web.Services.Concrete
                 Expires = DateTime.Now.AddMonths(1),
             };
             _httpContext.Response.Cookies.Append(CartCookieName, jsonString, cookieOptions);
+        }
+
+        public static void SetCartItems(HttpContext context, List<CartLine> items)
+        {
+            context.Items[CartContextKey] = items;
+        }
+
+        public static List<CartLine> GetCartItems(HttpContext context)
+        {
+            return context.Items[CartContextKey] as List<CartLine>;
+        }
+
+        public static List<CookieCartLine> GetCartLinesFromCookie(HttpContext context)
+        {
+            var cartCookie = context.Request.Cookies[CartCookieName];
+            if (!string.IsNullOrEmpty(cartCookie))
+            {
+                return JsonConvert.DeserializeObject<List<CookieCartLine>>(cartCookie);
+            }
+            return new List<CookieCartLine>();
         }
     }
 }
