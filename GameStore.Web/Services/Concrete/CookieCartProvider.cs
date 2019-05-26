@@ -25,7 +25,7 @@ namespace GameStore.Web.Services.Concrete
             {
                 var cookieCartLines = JsonConvert.DeserializeObject<List<CookieCartLine>>(cartCookie);
                 var ids = cookieCartLines.Select(f => f.GameId);
-                var games = gameRepository.Games.Where(s => ids.Contains(s.GameId)).ToList();
+                var games = gameRepository.GetGamesByIds(ids);
                 foreach (var game in games)
                 {
                     _lineCollection.Add(new CartLine

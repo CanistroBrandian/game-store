@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameStore.Web.Controllers
 {
@@ -17,16 +18,14 @@ namespace GameStore.Web.Controllers
             repository = repo;
         }
 
-        public ViewResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(repository.Games);
+            return View(await repository.GetGamesAsync());
         }
 
-        public ViewResult Edit(int gameId)
+        public async Task<IActionResult> Edit(int gameId)
         {
-            Game game = repository.Games
-                .FirstOrDefault(g => g.GameId == gameId);
-            return View(game);
+            return View(await repository.FindAsync(gameId));
         }
 
         // Перегруженная версия Edit() для сохранения изменений
@@ -47,7 +46,7 @@ namespace GameStore.Web.Controllers
         //}
 
         [HttpPost]
-        public ActionResult Edit(Game game, IFormFile image = null)
+        public async Task<IActionResult> Edit(Game game, IFormFile image = null)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +59,7 @@ namespace GameStore.Web.Controllers
                         imageStream.Read(game.ImageData, 0, (int)image.Length);
                     }
                 }
-                repository.SaveGame(game);
+                await repository.SaveGameAsync(game);
                 TempData["message"] = string.Format("Изменения в игре \"{0}\" были сохранены", game.Name);
                 return RedirectToAction("Index");
             }
@@ -71,15 +70,15 @@ namespace GameStore.Web.Controllers
             }
         }
 
-        public ViewResult Create()
+        public IActionResult Create()
         {
             return View("Edit", new Game());
         }
 
         [HttpPost]
-        public ActionResult Delete(int gameId)
+        public async Task<IActionResult> Delete(int gameId)
         {
-            Game deletedGame = repository.DeleteGame(gameId);
+            Game deletedGame = await repository.DeleteGameAsync(gameId);
             if (deletedGame != null)
             {
                 TempData["message"] = string.Format("Игра \"{0}\" была удалена",

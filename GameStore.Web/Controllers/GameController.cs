@@ -20,18 +20,14 @@ namespace GameStore.Web.Controllers
         {
             GamesListViewModel model = new GamesListViewModel
             {
-                Games = repository.Games
-                    .Where(p => category == null || p.Category == category)
-                    .OrderBy(game => game.GameId)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize),
+                Games = repository.GetByCategory(category, page, pageSize),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
                     TotalItems = category == null ?
-                repository.Games.Count() :
-                repository.Games.Where(game => game.Category == category).Count()
+                repository.GetCount() :
+                repository.GetCountByCategory(category)
                 },
                 CurrentCategory = category
             };
@@ -39,9 +35,7 @@ namespace GameStore.Web.Controllers
         }
         public IActionResult GetImage(int gameId)
         {
-            Game game = repository.Games
-                .FirstOrDefault(g => g.GameId == gameId);
-
+            Game game = repository.Find(gameId);
             if (game != null)
             {
                 return File(game.ImageData, game.ImageMimeType);

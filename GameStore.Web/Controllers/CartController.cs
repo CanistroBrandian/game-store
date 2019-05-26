@@ -59,8 +59,7 @@ namespace GameStore.Web.Controllers
 
             public IActionResult AddToCart(int gameId, string returnUrl)
             {
-                Game game = _repository.Games
-                    .FirstOrDefault(g => g.GameId == gameId);
+                Game game = _repository.Find(gameId);
 
                 if (game != null)
                 {
@@ -71,8 +70,7 @@ namespace GameStore.Web.Controllers
 
             public IActionResult RemoveFromCart(int gameId, string returnUrl)
             {
-                Game game = _repository.Games
-                    .FirstOrDefault(g => g.GameId == gameId);
+                Game game = _repository.Find(gameId);
 
                 if (game != null)
                 {

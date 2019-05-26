@@ -17,12 +17,7 @@ namespace GameStore.Web.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-
-            IEnumerable<string> categories = _repository.Games
-                .Select(game => game.Category)
-                .Distinct()
-                .OrderBy(x => x);
-            return View("Default", categories);
+            return View("Default", _repository.GetCategories());
         }
     }
 }
