@@ -1,0 +1,17 @@
+X-Sender: gamestore@example.com
+X-Receiver: orders@example.com
+MIME-Version: 1.0
+From: gamestore@example.com
+To: orders@example.com
+Date: 26 May 2019 18:13:41 +0300
+Subject: =?utf-8?B?0J3QvtCy0YvQuSDQt9Cw0LrQsNC3INC+0YLQv9GA0LDQstC7?=
+ =?utf-8?B?0LXQvSE=?=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+
+0J3QvtCy0YvQuSDQt9Cw0LrQsNC3INC+0LHRgNCw0LHQvtGC0LDQvQ0KLS0tDQrQotC+
+0LLQsNGA0Ys6DQoyIHggU2ltQ2l0eTEgKNC40YLQvtCz0L46IDLCoDk5OCwwMCBCcjEg
+eCBUSVRBTkZBTEwgKNC40YLQvtCz0L46IDLCoDI5OSwwMCBCctCe0LHRidCw0Y8g0YHR
+gtC+0LjQvNC+0YHRgtGMOiA1wqAyOTcsMDAgQnItLS0NCtCU0L7RgdGC0LDQstC60LA6
+DQphc2QNCmFzZA0KYXNkDQpkYXMNCmFkDQphc2QNCi0tLQ0K0J/QvtC00LDRgNC+0YfQ
+vdCw0Y8g0YPQv9Cw0LrQvtCy0LrQsDog0J3QtdGC

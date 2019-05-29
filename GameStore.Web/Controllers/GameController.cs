@@ -2,6 +2,7 @@
 using GameStore.Domain.Entities;
 using GameStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace GameStore.Web.Controllers
@@ -16,7 +17,7 @@ namespace GameStore.Web.Controllers
             repository = repo;
         }
 
-        public IActionResult List(string category, int page = 1)
+        public async Task<IActionResult> List(string category, int page = 1)
         {
             GamesListViewModel model = new GamesListViewModel
             {
@@ -29,9 +30,15 @@ namespace GameStore.Web.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
+<<<<<<< Migrating_to_core
                     TotalItems = category == null ?
                 repository.Games.Count() :
                 repository.Games.Where(game => game.Category == category).Count()
+=======
+                    TotalItems =  category == null ? 
+            await repository.GetCountAsync() :
+            await repository.GetCountByCategoryAsync(category)
+>>>>>>> local
                 },
                 CurrentCategory = category
             };
