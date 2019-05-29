@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameStore.Web.Services.Concrete
 {
@@ -32,7 +33,7 @@ namespace GameStore.Web.Services.Concrete
 
             if (line == null)
             {
-                _lineCollection.Add(new CartLine
+                 _lineCollection.Add(new CartLine
                 {
                     Game = game,
                     Quantity = quantity
@@ -42,7 +43,7 @@ namespace GameStore.Web.Services.Concrete
             {
                 line.Quantity += quantity;
             }
-            SaveChanges();
+             SaveChanges();
         }
 
         public void RemoveLine(Game game)
@@ -68,8 +69,8 @@ namespace GameStore.Web.Services.Concrete
         {
             var cookieList = _lineCollection.Select(s => new CookieCartLine
             {
-                GameId = s.Game.GameId,
-                Quantity = s.Quantity
+                GameId =  s.Game.GameId,
+                Quantity =  s.Quantity
             }).ToList();
             var jsonString = JsonConvert.SerializeObject(cookieList);
             var cookieOptions = new Microsoft.AspNetCore.Http.CookieOptions()

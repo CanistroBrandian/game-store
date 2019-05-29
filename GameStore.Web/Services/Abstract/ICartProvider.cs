@@ -10,6 +10,7 @@ namespace GameStore.Web.Services.Abstract
     public interface ICartProvider
     {
         void AddItem(Game game, int quantity);
+       // TaskAddItemAsync(Game game, int quantity);
 
         void RemoveLine(Game game);
 
