@@ -46,6 +46,28 @@ namespace GameStore.Web.Services.Concrete
              SaveChanges();
         }
 
+        public void AddItemAsync(Game game, int quantity)
+        {
+            CartLine line =  _lineCollection
+               .Where(g => g.Game.GameId == game.GameId)
+               .FirstOrDefault();
+
+            if (line == null)
+            {
+                _lineCollection.Add(new CartLine
+                {
+                    Game = game,
+                    Quantity = quantity
+                });
+            }
+            else
+            {
+                line.Quantity += quantity;
+            }
+            SaveChanges();
+        }
+
+
         public void RemoveLine(Game game)
         {
             _lineCollection.RemoveAll(l => l.Game.GameId == game.GameId);
@@ -102,5 +124,7 @@ namespace GameStore.Web.Services.Concrete
             }
             return new List<CookieCartLine>();
         }
+
+       
     }
 }

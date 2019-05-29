@@ -34,9 +34,9 @@ namespace GameStore.Web.Controllers
             };
             return View(model);
         }
-        public IActionResult GetImage(int gameId)
+        public async Task<IActionResult> GetImage(int gameId)
         {
-            Game game = repository.Find(gameId);
+            Game game = await repository.FindAsync(gameId);
             if (game != null)
             {
                 return File(game.ImageData, game.ImageMimeType);

@@ -4,6 +4,7 @@ using GameStore.Web.Models;
 using GameStore.Web.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameStore.Web.Controllers
 {
@@ -57,20 +58,20 @@ namespace GameStore.Web.Controllers
                 });
             }
 
-            public IActionResult AddToCart(int gameId, string returnUrl)
+            public async Task<IActionResult> AddToCart(int gameId, string returnUrl)
             {
-                Game game = _repository.Find(gameId);
+                Game game = await _repository.FindAsync(gameId);
 
                 if (game != null)
                 {
-                    _cartProvider.AddItem(game, 1);
+                     _cartProvider.AddItem(game, 1);
                 }
                 return RedirectToAction("Index", new { returnUrl });
             }
 
-            public IActionResult RemoveFromCart(int gameId, string returnUrl)
+            public async Task<IActionResult> RemoveFromCart(int gameId, string returnUrl)
             {
-                Game game = _repository.Find(gameId);
+                Game game = await _repository.FindAsync(gameId);
 
                 if (game != null)
                 {

@@ -91,10 +91,11 @@ namespace GameStore.Domain.Concrete
             return _context.Games.AsNoTracking().FirstOrDefault(s => s.GameId == gameId);
         }
 
-        public Task<Game> FindAsync(int gameId)
+        public async Task<Game> FindAsync(int gameId)
         {
-            return _context.Games.AsNoTracking().FirstOrDefaultAsync(s => s.GameId == gameId);
+            return await _context.Games.AsNoTracking().FirstOrDefaultAsync(s => s.GameId == gameId);
         }
+
 
         public IEnumerable<string> GetCategories()
         {
@@ -129,5 +130,17 @@ namespace GameStore.Domain.Concrete
         {
             return _context.Games.Where(game => game.Category == category).Count();
         }
+
+        public async Task<int> GetCountAsync()
+        {
+            return await _context.Games.AsNoTracking().CountAsync();
+        }
+
+        public async Task<int> GetCountByCategoryAsync(string category)
+        {
+            return await _context.Games.Where(game => game.Category == category).AsNoTracking().CountAsync();
+        }
+
+        
     }
 }
