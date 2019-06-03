@@ -1,5 +1,5 @@
 ﻿using GameStore.Domain.Abstract;
-using GameStore.Domain.Concrete;
+using GameStore.Domain.Concrete.ContextMongoDB;
 using GameStore.Web.Infrastructure;
 using GameStore.Web.Middlewares.Extensions;
 using GameStore.Web.Services.Abstract;
@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,11 +32,20 @@ namespace GameStore.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddDbContext<EFDbContext>(options => options.UseSqlServer
-                 (Configuration.GetSection("ConnectionStrings").GetValue<string>("EFDbContext")
-            ));
 
-            services.AddScoped<IGameRepository, EFGameRepository>();
+            //services.AddDbContext<EFDbContext>(options => options.UseSqlServer
+            //     (Configuration.GetSection("ConnectionStrings").GetValue<string>("EFDbContext")
+            //));
+
+            services.AddScoped<MongoContext>(s =>
+            {
+                var connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("MongoDbContext");
+                return new MongoContext(connectionString);
+
+            });
+
+            //services.AddScoped<IGameRepository, EFGameRepository>();
+            services.AddScoped<IGameRepository, MongoGameRepository>();
             services.AddScoped<IOrderProcessor>(s =>
             {
                 EmailSettings emailSettings = new EmailSettings

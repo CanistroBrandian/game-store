@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.Domain.Entities
 {
     public class Game
     {
-        //[HiddenInput(DisplayValue = false)]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("_id")]
+        [BsonId]
         public int GameId { get; set; }
 
         [Display(Name = "Название")]
